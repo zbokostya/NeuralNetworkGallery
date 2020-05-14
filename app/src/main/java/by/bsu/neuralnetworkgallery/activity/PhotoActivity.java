@@ -35,7 +35,7 @@ public class PhotoActivity extends AppCompatActivity {
         Photo spacePhoto = getIntent().getParcelableExtra(EXTRA_SPACE_PHOTO);
 
         Glide.with(this)
-                .load(new File(spacePhoto.getUrl().getPath()))
+                .load(spacePhoto.getUrl())
                 .asBitmap()
                 .error(R.drawable.ic_cloud_off_red)
                 .skipMemoryCache(true)

@@ -1,5 +1,6 @@
 package by.bsu.neuralnetworkgallery.activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -223,7 +224,7 @@ public class RequestActivity extends Activity {
         };
         queue.add(rr);
     }
-
+    @RequiresApi(28)
     public void getResult(String url){
         RequestQueue queue = Volley.newRequestQueue(this);
         ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {

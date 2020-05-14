@@ -1,6 +1,7 @@
 package by.bsu.neuralnetworkgallery.entity;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.database.Cursor;
 
 import android.net.Uri;
@@ -15,16 +16,16 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Photo implements Parcelable {
-    private Uri mUrl;
+    private String mUrl;
     private String mTitle;
 
-    public Photo(Uri url, String title) {
+    public Photo(String url, String title) {
         mUrl = url;
         mTitle = title;
     }
 
     protected Photo(Parcel in) {
-        mUrl = (Uri)in.readValue(Uri.class.getClassLoader());
+        mUrl = in.readString();
         mTitle = in.readString();
     }
 
@@ -40,11 +41,11 @@ public class Photo implements Parcelable {
         }
     };
 
-    public Uri getUrl() {
+    public String getUrl() {
         return mUrl;
     }
 
-    public void setUrl(Uri url) {
+    public void setUrl(String url) {
         mUrl = url;
     }
 
@@ -68,31 +69,78 @@ public class Photo implements Parcelable {
 //        };
 //    }
 
-    static public Photo[] getFromSDCard(Activity activity) {
+    /*static public Photo[] getFromSDCard(Activity activity) {
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor;
-        int column_index_id;
-        //ArrayList<Uri> listOfAllImages = new ArrayList<>();
+        int column_index_id, column_index_name;
         ArrayList<Photo> listPhotos = new ArrayList<>();
-        Long imageId ;
-        String[] projection = {MediaStore.MediaColumns._ID};
+        Long imageId;
+        String imageName;
+        String[] projection = {
+                MediaStore.MediaColumns._ID,
+                MediaStore.MediaColumns.MIME_TYPE
+        };
+
 
         cursor = activity.getContentResolver().query(uri, projection, null,
                 null, null);
+
+
         if (cursor != null) {
             column_index_id = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+            column_index_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.MIME_TYPE);
             while (cursor.moveToNext()) {
                 imageId = cursor.getLong(column_index_id);
-                Uri uriImage = Uri.withAppendedPath(uri, "" + imageId);
+                imageName = cursor.getString(column_index_name);
+//                Uri uriImageName = Uri.withAppendedPath(uri, "" + imageName);
+                Uri uriImage = Uri.withAppendedPath(uri, ""+imageId);
+
+                Log.d("123456768790", imageId+"");
+                Log.d("123456768790", imageName);
+
                 listPhotos.add(new Photo(uriImage, ""));
             }
+
             cursor.close();
         }
         Photo[] rez = new Photo[listPhotos.size()];
         rez = listPhotos.toArray(rez);
-        Log.d("1234", rez[0].getUrl().toString());
+        // test
+//        Log.d("1234", rez[0].getUrl().getPath());
+//        Log.d("1234", Uri.fromFile(new File("/storage/1B13-080C/DCIM/1.jpg")).toString());
+        return rez;
+    }*/
+    public static Photo[] getFromSDCard(Activity activity) {
+        Uri uri;
+        Cursor cursor;
+        int column_index_data, column_index_folder_name;
+        ArrayList<String> listOfAllImages = new ArrayList<String>();
+        String absolutePathOfImage;
+        String absoluteFolderOfImage;
+        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = { MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
+
+        cursor = activity.getContentResolver().query(uri, projection, null,
+                null, null);
+
+        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        column_index_folder_name = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+        while (cursor.moveToNext()) {
+            absolutePathOfImage = cursor.getString(column_index_data);
+            absoluteFolderOfImage = cursor.getString(column_index_folder_name);
+            listOfAllImages.add(absolutePathOfImage);
+        }
+        Photo[] rez = new Photo[listOfAllImages.size()];
+        for(int i = 0; i < listOfAllImages.size(); i++) {
+            rez[i] = new Photo(listOfAllImages.get(i), "");
+        }
+        Log.d("123", rez[0].getUrl());
         return rez;
     }
+
 //    public static ArrayList<String> getImagesPath(Activity activity) {
 //        Uri uri;
 //        ArrayList<String> listOfAllImages = new ArrayList<String>();
@@ -130,7 +178,7 @@ public class Photo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeValue(mUrl);
+        parcel.writeString(mUrl);
         parcel.writeString(mTitle);
     }
 }

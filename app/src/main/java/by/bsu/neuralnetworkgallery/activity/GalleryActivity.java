@@ -64,7 +64,7 @@ public class GalleryActivity extends AppCompatActivity {
             ImageView imageView = holder.mPhotoImageView;
 
             Glide.with(mContext)
-                    .load(new File(spacePhoto.getUrl().getPath()))
+                    .load(spacePhoto.getUrl())
                     .placeholder(R.drawable.ic_cloud_off_red)
                     .into(imageView);
         }
