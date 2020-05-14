@@ -2,6 +2,7 @@ package by.bsu.neuralnetworkgallery;
 
 import androidx.appcompat.app.AppCompatActivity;
 import by.bsu.neuralnetworkgallery.activity.GalleryActivity;
+import by.bsu.neuralnetworkgallery.activity.RequestActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,12 +25,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button showGalleryBtn = (Button) findViewById(R.id.btn_show_gallery);
+        Button showGalleryBtn = findViewById(R.id.btn_show_gallery);
         showGalleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent galleryIntent = new Intent(MainActivity.this, GalleryActivity.class);
                 startActivity(galleryIntent);
+            }
+        });
+        Button changeImageBtn = findViewById(R.id.btn_change_image);
+        changeImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent changeImageIntent = new Intent(MainActivity.this, RequestActivity.class);
+                startActivity(changeImageIntent);
             }
         });
 
