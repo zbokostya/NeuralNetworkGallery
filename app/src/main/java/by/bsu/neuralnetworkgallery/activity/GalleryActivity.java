@@ -6,9 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +22,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity {
 
@@ -31,12 +37,12 @@ public class GalleryActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        GalleryActivity.ImageGalleryAdapter adapter = new GalleryActivity.ImageGalleryAdapter(this, Photo.getSpacePhotos());
+        GalleryActivity.ImageGalleryAdapter adapter = new GalleryActivity.ImageGalleryAdapter(this, Photo.getFromSDCard(this));
         recyclerView.setAdapter(adapter);
 
     }
 
-    private class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.MyViewHolder>  {
+    private class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.MyViewHolder> {
 
         @Override
         public ImageGalleryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,7 +64,7 @@ public class GalleryActivity extends AppCompatActivity {
             ImageView imageView = holder.mPhotoImageView;
 
             Glide.with(mContext)
-                    .load(spacePhoto.getUrl())
+                    .load(new File(spacePhoto.getUrl().getPath()))
                     .placeholder(R.drawable.ic_cloud_off_red)
                     .into(imageView);
         }
@@ -83,7 +89,7 @@ public class GalleryActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 int position = getAdapterPosition();
-                if(position != RecyclerView.NO_POSITION) {
+                if (position != RecyclerView.NO_POSITION) {
                     Photo spacePhoto = mSpacePhotos[position];
 
                     Intent intent = new Intent(mContext, PhotoActivity.class);
@@ -96,8 +102,9 @@ public class GalleryActivity extends AppCompatActivity {
         private Photo[] mSpacePhotos;
         private Context mContext;
 
-        public ImageGalleryAdapter(Context context, Photo[] spacePhotos) {
+        public ImageGalleryAdapter(Activity context, Photo[] spacePhotos) {
             mContext = context;
+           // Log.d("12345", spacePhotos[0].getUrl().toString());
             mSpacePhotos = spacePhotos;
         }
     }
