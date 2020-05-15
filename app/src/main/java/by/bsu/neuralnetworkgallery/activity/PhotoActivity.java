@@ -25,16 +25,17 @@ public class PhotoActivity extends AppCompatActivity {
     public static final String EXTRA_SPACE_PHOTO = "SpacePhotoActivity.SPACE_PHOTO";
 
     private ImageView mImageView;
-
+    String imagePath;
+   // String
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
 
         mImageView = (ImageView) findViewById(R.id.image);
-        Photo spacePhoto = getIntent().getParcelableExtra(EXTRA_SPACE_PHOTO);
+        //Photo spacePhoto =
 
-        Glide.with(this)
+        /*Glide.with(this)
                 .load(spacePhoto.getUrl())
                 .asBitmap()
                 .error(R.drawable.ic_cloud_off_red)
@@ -42,6 +43,6 @@ public class PhotoActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(mImageView);
 
-
+*/
     }
 }

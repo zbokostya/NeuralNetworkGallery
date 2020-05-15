@@ -15,101 +15,56 @@ import java.io.Console;
 import java.io.File;
 import java.util.ArrayList;
 
-public class Photo implements Parcelable {
-    private String mUrl;
-    private String mTitle;
+public class Photo {
+    private String pictureName;
+    private String picturePath;
+    private String pictureSize;
+    private String imageUri;
+    private Boolean selected = false;
 
-    public Photo(String url, String title) {
-        mUrl = url;
-        mTitle = title;
+    public Photo() {
     }
 
-    protected Photo(Parcel in) {
-        mUrl = in.readString();
-        mTitle = in.readString();
+    public String getPictureName() {
+        return pictureName;
     }
 
-    public static final Parcelable.Creator<Photo> CREATOR = new Parcelable.Creator<Photo>() {
-        @Override
-        public Photo createFromParcel(Parcel in) {
-            return new Photo(in);
-        }
-
-        @Override
-        public Photo[] newArray(int size) {
-            return new Photo[size];
-        }
-    };
-
-    public String getUrl() {
-        return mUrl;
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
     }
 
-    public void setUrl(String url) {
-        mUrl = url;
+    public String getPicturePath() {
+        return picturePath;
     }
 
-    public String getTitle() {
-        return mTitle;
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
     }
 
-    public void setTitle(String title) {
-        mTitle = title;
+    public String getPictureSize() {
+        return pictureSize;
     }
 
-//    public static Photo[] getSpacePhotos() {
-//
-//        return new Photo[]{
-//                new Photo("http://i.imgur.com/zuG2bGQ.jpg", "Galaxy"),
-//                new Photo("http://i.imgur.com/ovr0NAF.jpg", "Space Shuttle"),
-//                new Photo("http://i.imgur.com/n6RfJX2.jpg", "Galaxy Orion"),
-//                new Photo("http://i.imgur.com/qpr5LR2.jpg", "Earth"),
-//                new Photo("http://i.imgur.com/pSHXfu5.jpg", "Astronaut"),
-//                new Photo("http://i.imgur.com/3wQcZeY.jpg", "Satellite"),
-//        };
-//    }
+    public void setPictureSize(String pictureSize) {
+        this.pictureSize = pictureSize;
+    }
 
-    /*static public Photo[] getFromSDCard(Activity activity) {
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor;
-        int column_index_id, column_index_name;
-        ArrayList<Photo> listPhotos = new ArrayList<>();
-        Long imageId;
-        String imageName;
-        String[] projection = {
-                MediaStore.MediaColumns._ID,
-                MediaStore.MediaColumns.MIME_TYPE
-        };
+    public String getImageUri() {
+        return imageUri;
+    }
 
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
 
-        cursor = activity.getContentResolver().query(uri, projection, null,
-                null, null);
+    public Boolean getSelected() {
+        return selected;
+    }
 
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
+    }
 
-        if (cursor != null) {
-            column_index_id = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
-            column_index_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.MIME_TYPE);
-            while (cursor.moveToNext()) {
-                imageId = cursor.getLong(column_index_id);
-                imageName = cursor.getString(column_index_name);
-//                Uri uriImageName = Uri.withAppendedPath(uri, "" + imageName);
-                Uri uriImage = Uri.withAppendedPath(uri, ""+imageId);
-
-                Log.d("123456768790", imageId+"");
-                Log.d("123456768790", imageName);
-
-                listPhotos.add(new Photo(uriImage, ""));
-            }
-
-            cursor.close();
-        }
-        Photo[] rez = new Photo[listPhotos.size()];
-        rez = listPhotos.toArray(rez);
-        // test
-//        Log.d("1234", rez[0].getUrl().getPath());
-//        Log.d("1234", Uri.fromFile(new File("/storage/1B13-080C/DCIM/1.jpg")).toString());
-        return rez;
-    }*/
     public static Photo[] getFromSDCard(Activity activity) {
         Uri uri;
         Cursor cursor;
@@ -119,66 +74,26 @@ public class Photo implements Parcelable {
         String absoluteFolderOfImage;
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        String[] projection = { MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
+        String[] projection = {MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
 
         cursor = activity.getContentResolver().query(uri, projection, null,
                 null, null);
 
         column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        column_index_folder_name = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+        column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
             absoluteFolderOfImage = cursor.getString(column_index_folder_name);
+            Log.d("123", absoluteFolderOfImage);
             listOfAllImages.add(absolutePathOfImage);
         }
         Photo[] rez = new Photo[listOfAllImages.size()];
-        for(int i = 0; i < listOfAllImages.size(); i++) {
-            rez[i] = new Photo(listOfAllImages.get(i), "");
+        for (int i = 0; i < listOfAllImages.size(); i++) {
+           // rez[i] = new Photo(listOfAllImages.get(i), "");
         }
-        Log.d("123", rez[0].getUrl());
+        //Log.d("123", rez[0].getUrl());
         return rez;
     }
 
-//    public static ArrayList<String> getImagesPath(Activity activity) {
-//        Uri uri;
-//        ArrayList<String> listOfAllImages = new ArrayList<String>();
-//        Cursor cursor;
-//        int column_index_data, column_index_folder_name;
-//        String PathOfImage = null;
-//        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-//
-//        String[] projection = { MediaStore.MediaColumns.DATA,
-//                MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
-//
-//        cursor = getApplicationContext().getContentResolver().query(
-//                MediaStore.media-type.Media.EXTERNAL_CONTENT_URI,
-//                projection,
-//                selection,
-//                selectionArgs,
-//                sortOrder
-//        );
-//
-//        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-//        column_index_folder_name = cursor
-//                .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-//        while (cursor.moveToNext()) {
-//            PathOfImage = cursor.getString(column_index_data);
-//
-//            listOfAllImages.add(PathOfImage);
-//        }
-//        return listOfAllImages;
-//    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(mUrl);
-        parcel.writeString(mTitle);
-    }
 }
