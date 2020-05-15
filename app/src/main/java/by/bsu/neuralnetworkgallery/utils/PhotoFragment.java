@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextClock;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -20,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import by.bsu.neuralnetworkgallery.MainActivity;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 
@@ -31,9 +35,11 @@ public class PhotoFragment extends Fragment {
     private int position;
     private Context animeContx;
     private ImageView image;
+    private ImageButton share;
     private ViewPager imagePager;
     private ImagesPagerAdapter pagingImages;
     private int previousSelected = -1;
+    private boolean visibleShare = false;
 
     public PhotoFragment() {
 
@@ -55,7 +61,6 @@ public class PhotoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.picture_browser, container, false);
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,7 +77,7 @@ public class PhotoFragment extends Fragment {
         imagePager.setOffscreenPageLimit(3);
         imagePager.setCurrentItem(position);//displaying the image at the current position passed by the ImageDisplay Activity
 
-
+        share = view.findViewById(R.id.share);
         /**
          * setting up the recycler view indicator for the viewPager
          */
@@ -110,6 +115,13 @@ public class PhotoFragment extends Fragment {
             }
         });
 
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               Log.d("share","Clicked" );
+            }
+        });
+
 
     }
 
@@ -127,11 +139,12 @@ public class PhotoFragment extends Fragment {
 
             View view = layoutinflater.inflate(R.layout.picture_browser_pager, null);
             image = view.findViewById(R.id.image);
+           // textView = view.findViewById(R.id.textBrowser);
 
             setTransitionName(image, String.valueOf(position) + "picture");
 
             Photo pic = allImages.get(position);
-            Glide.with(animeContx)
+            Glide  .with(animeContx)
                     .load(pic.getPicturePath())
                     .fitCenter()
                     .into(image);
@@ -139,8 +152,14 @@ public class PhotoFragment extends Fragment {
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("touche", "click");
-                    //todo
+                    if(visibleShare) {
+                        share.setVisibility(View.GONE);
+                        visibleShare = false;
+                    } else {
+                        share.setVisibility(View.VISIBLE);
+                        visibleShare = true;
+                    }
+                    Log.d("Cliker", "Clicked123");
                 }
             });
 

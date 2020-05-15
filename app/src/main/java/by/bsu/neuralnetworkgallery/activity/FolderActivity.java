@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.adapter.PhotoAdapter;
 import by.bsu.neuralnetworkgallery.entity.Photo;
+import by.bsu.neuralnetworkgallery.test.FileOpen;
 import by.bsu.neuralnetworkgallery.utils.PhotoFragment;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import android.transition.Fade;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FolderActivity extends AppCompatActivity implements onClickedListener {
