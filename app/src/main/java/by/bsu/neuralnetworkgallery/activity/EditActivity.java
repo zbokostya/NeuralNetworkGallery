@@ -92,7 +92,7 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
         else {
             inProgress = true;
             final ServerConnector connection = new ServerConnector(getApplicationContext(), image);
-            connection.postImage(id_post);
+
             final Handler handler = new Handler() {
                 @SuppressLint("ResourceType")
                 @Override
@@ -107,10 +107,10 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
                     writer.writeFile(bitmap);
                 }
             };
-            reader.read(getApplicationContext());
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    connection.postImage(id_post);
                     while (!connection.isReady()) {
                         synchronized (this) {
                             try {
@@ -139,9 +139,9 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
                 progressBar.setVisibility(View.INVISIBLE);
             }
         };
-        reader.read(getApplicationContext());
         Runnable runnable = new Runnable() {
             public void run() {
+                reader.read(getApplicationContext());
                 while (!reader.isReady()) {
                     synchronized (this) {
                         try {

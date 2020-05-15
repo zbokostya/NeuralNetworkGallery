@@ -20,13 +20,13 @@ public class ImageWriter {
         int hour = calendar.get(Calendar.HOUR);
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
-        final String fileName = "IMG_" + year + "" + month + "" + day + "_" + hour + "" + minute + "" + second + ".jpg";
+        final String fileName = "IMG_" + year + "" + month + "" + day + "_" + hour + "" + minute + "" + second + ".png";
         try {
             File dir = new File(file + "/Pictures/NeuralNetworkGallery/");
             dir.mkdirs();
             File write = new File(dir, fileName);
             FileOutputStream out = new FileOutputStream(write);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
 

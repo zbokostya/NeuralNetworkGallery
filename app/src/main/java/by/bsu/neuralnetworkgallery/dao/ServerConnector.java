@@ -4,9 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,19 +29,21 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import by.bsu.neuralnetworkgallery.R;
+import by.bsu.neuralnetworkgallery.activity.EditActivity;
+import by.bsu.neuralnetworkgallery.adapter.StyleAdapter;
+
 public class ServerConnector {
-    final private String X_API_KEY = "J8s6oR3w8O2PdGJPPQMC94KsGp0swPaH4bq34ouo";
+    final private String X_API_KEY = "BpHLR5UQF07dAlOuG3ixd3dCUZUdKWFa4rB3DlmT";
     final private String POST_URL = "https://api.deeparteffects.com/v1/noauth/upload";
     final private String GET_URL = "https://api.deeparteffects.com/v1/noauth/result?submissionId=";
 
     private Context context;
-    private ImageView imageView;
     private Bitmap bitmap;
     private boolean isReady = false;
 
     public ServerConnector(Context context, ImageView imageView) {
         this.context = context;
-        this.imageView = imageView;
         bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     }
 
@@ -46,7 +53,7 @@ public class ServerConnector {
         JSONObject request = new JSONObject();
         try {
             request.put("styleId", style);
-            request.put("imageBase64Encoded", getStringImage(bitmap));
+            request.put("imageBase64Encoded", getStringImage());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -117,15 +124,15 @@ public class ServerConnector {
         queue.add(rr);
     }
 
-    public boolean isReady(){
+    public boolean isReady() {
         return isReady;
     }
 
-    public Bitmap result(){
+    public Bitmap result() {
         return bitmap;
     }
 
-    private void getResult(String url){
+    private void getResult(String url) {
         RequestQueue queue = Volley.newRequestQueue(context);
         ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
             @Override
@@ -143,13 +150,14 @@ public class ServerConnector {
         queue.add(imageRequest);
     }
 
-    private String getStringImage(Bitmap bmp) {
+
+    private String getStringImage() {
         ByteArrayOutputStream baos;
         String encodedImage = "";
         int quality = 100;
         do {
             baos = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
             byte[] imageBytes = baos.toByteArray();
             encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
             quality-=5;
