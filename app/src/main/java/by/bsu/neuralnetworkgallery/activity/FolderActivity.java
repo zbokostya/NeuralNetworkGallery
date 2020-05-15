@@ -31,7 +31,6 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
         folderPath = getIntent().getStringExtra("folderPath");
 
         folderName = findViewById(R.id.foldername);
-        Log.d("text", getIntent().getStringExtra("folderName"));
         folderName.setText(getIntent().getStringExtra("folderName"));
 
         allpictures = new ArrayList<>();
