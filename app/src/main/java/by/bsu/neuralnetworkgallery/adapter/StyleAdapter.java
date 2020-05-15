@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
@@ -238,9 +240,9 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
-        TextView myTextView2;
-        ImageView myImageView;
+        private TextView myTextView;
+        private TextView myTextView2;
+        private ImageView myImageView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -250,20 +252,31 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
+        @SuppressLint("ResourceType")
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
         }
+
     }
 
-    // convenience method for getting data at click position
     public String getItem(int id) {
         return mData.get(id).getTitle();
     }
 
-    // allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     // parent activity will implement this method to respond to click events

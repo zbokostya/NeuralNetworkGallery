@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import by.bsu.neuralnetworkgallery.activity.EditActivity;
+
+import by.bsu.neuralnetworkgallery.activity.EditActivity;
 import by.bsu.neuralnetworkgallery.activity.GalleryActivity;
 import by.bsu.neuralnetworkgallery.entity.Folder;
 
@@ -67,5 +69,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+        //reverse order ArrayList
+       /* ArrayList<imageFolder> reverseFolders = new ArrayList<>();
+        for(int i = picFolders.size()-1;i > reverseFolders.size()-1;i--){
+            reverseFolders.add(picFolders.get(i));
+        }*/
+
+
+
+
+
 
 }

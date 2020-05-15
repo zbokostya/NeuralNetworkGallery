@@ -25,13 +25,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerConnector {
-    final private String X_API_KEY = "nbp29jHjEL8wnVp7AsHLaTJAMChbVA1q6fPjyB60";
+    final private String X_API_KEY = "J8s6oR3w8O2PdGJPPQMC94KsGp0swPaH4bq34ouo";
     final private String POST_URL = "https://api.deeparteffects.com/v1/noauth/upload";
     final private String GET_URL = "https://api.deeparteffects.com/v1/noauth/result?submissionId=";
 
     private Context context;
     private ImageView imageView;
     private Bitmap bitmap;
+    private boolean isReady = false;
 
     public ServerConnector(Context context, ImageView imageView) {
         this.context = context;
@@ -40,6 +41,7 @@ public class ServerConnector {
     }
 
     public void postImage(String style) {
+        isReady = false;
         Log.i("ServerConnection", "post image");
         JSONObject request = new JSONObject();
         try {
@@ -115,13 +117,22 @@ public class ServerConnector {
         queue.add(rr);
     }
 
+    public boolean isReady(){
+        return isReady;
+    }
+
+    public Bitmap result(){
+        return bitmap;
+    }
+
     private void getResult(String url){
         RequestQueue queue = Volley.newRequestQueue(context);
         ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 Log.i("ServerConnection", "image get success");
-                imageView.setImageBitmap(response);
+                bitmap = response;
+                isReady = true;
             }
         }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new Response.ErrorListener() {
             @Override
@@ -141,7 +152,7 @@ public class ServerConnector {
             bmp.compress(Bitmap.CompressFormat.JPEG, quality, baos);
             byte[] imageBytes = baos.toByteArray();
             encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            quality--;
+            quality-=5;
         } while (encodedImage.length() >= 500000);
         return encodedImage;
     }

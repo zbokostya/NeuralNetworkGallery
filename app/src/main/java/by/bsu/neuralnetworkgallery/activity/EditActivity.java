@@ -1,11 +1,14 @@
 package by.bsu.neuralnetworkgallery.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -18,17 +21,22 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import by.bsu.neuralnetworkgallery.MainActivity;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.adapter.StyleAdapter;
+import by.bsu.neuralnetworkgallery.dao.ImageWriter;
 import by.bsu.neuralnetworkgallery.dao.ServerConnector;
 import by.bsu.neuralnetworkgallery.dao.StyleReader;
 import by.bsu.neuralnetworkgallery.entity.Style;
@@ -41,6 +49,10 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
     ArrayList<Style> styles;
     StyleReader reader = new StyleReader();
     String id_post = "";
+    View previouslySelected;
+    ProgressBar progressBar;
+    boolean isItemSelected = false;
+    boolean inProgress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +62,15 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
         image = findViewById(R.id.imageView);
         Button change = findViewById(R.id.change);
         recyclerView = findViewById(R.id.recycler_styles);
+        progressBar = findViewById(R.id.progressBar);
         init();
-
-
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ServerConnector connection = new ServerConnector(getApplicationContext(), image);
-                connection.postImage(id_post);
-
-
+                performRequest();
             }
         });
+
         choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +83,52 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
     }
 
 
+    private void performRequest(){
+        progressBar.setVisibility(View.VISIBLE);
+        if (id_post.isEmpty())
+            Toast.makeText(getApplicationContext(), "Select style first!", Toast.LENGTH_LONG).show();
+        else if(inProgress)
+            Toast.makeText(getApplicationContext(), "Wait!", Toast.LENGTH_LONG).show();
+        else {
+            inProgress = true;
+            final ServerConnector connection = new ServerConnector(getApplicationContext(), image);
+            connection.postImage(id_post);
+            final Handler handler = new Handler() {
+                @SuppressLint("ResourceType")
+                @Override
+                public void handleMessage(Message msg) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    image.setImageBitmap(bitmap);
+                    inProgress = false;
+                    isItemSelected = false;
+                    previouslySelected.setBackgroundResource(R.layout.border);
+                    previouslySelected = null;
+                    ImageWriter writer = new ImageWriter();
+                    writer.writeFile(bitmap);
+                }
+            };
+            reader.read(getApplicationContext());
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (!connection.isReady()) {
+                        synchronized (this) {
+                            try {
+                                wait(1000);
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+                    bitmap = connection.result();
+                    handler.sendEmptyMessage(0);
+                }
+            });
+            thread.start();
+        }
+    }
 
-    private void init(){
+    private void init() {
+        progressBar.setVisibility(View.VISIBLE);
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -83,6 +136,7 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
                 StyleAdapter adapter = new StyleAdapter(getApplicationContext(), styles, (ImageView) findViewById(R.id.expanded_image_view), (ConstraintLayout) findViewById(R.id.container));
                 adapter.setClickListener(EditActivity.this);
                 recyclerView.setAdapter(adapter);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         };
         reader.read(getApplicationContext());
@@ -126,11 +180,16 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
     }
 
 
+    @SuppressLint("ResourceType")
     @Override
     public void onItemClick(View view, int position) {
         id_post = styles.get(position).getId();
-        Toast.makeText(getApplicationContext(), styles.get(position).getTitle() + styles.get(position).getId(), Toast.LENGTH_SHORT).show();
+        view.setBackgroundResource(R.layout.border_selected);
+        if (!isItemSelected) {
+            isItemSelected = true;
+        } else
+            previouslySelected.setBackgroundResource(R.layout.border);
+        previouslySelected = view;
     }
-
 
 }
