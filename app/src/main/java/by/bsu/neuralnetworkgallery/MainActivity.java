@@ -3,8 +3,8 @@ package by.bsu.neuralnetworkgallery;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import by.bsu.neuralnetworkgallery.activity.EditActivity;
 import by.bsu.neuralnetworkgallery.activity.GalleryActivity;
-import by.bsu.neuralnetworkgallery.activity.RequestActivity;
 import by.bsu.neuralnetworkgallery.entity.Folder;
 
 import android.Manifest;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         changeImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent changeImageIntent = new Intent(MainActivity.this, RequestActivity.class);
+                Intent changeImageIntent = new Intent(MainActivity.this, EditActivity.class);
                 startActivity(changeImageIntent);
             }
         });
@@ -67,18 +67,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-        //reverse order ArrayList
-       /* ArrayList<imageFolder> reverseFolders = new ArrayList<>();
-        for(int i = picFolders.size()-1;i > reverseFolders.size()-1;i--){
-            reverseFolders.add(picFolders.get(i));
-        }*/
-
-
-
-
-
 
 }

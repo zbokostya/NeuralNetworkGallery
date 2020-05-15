@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-
+// gives folders
 public class PhotoFolderAdapter extends RecyclerView.Adapter<PhotoFolderAdapter.FolderHolder> {
 
     private ArrayList<Folder> folders;

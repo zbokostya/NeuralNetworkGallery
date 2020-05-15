@@ -16,16 +16,21 @@ import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
+import static androidx.core.view.ViewCompat.setTransitionName;
+
+
+//gives images in folder
+
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
 
     private ArrayList<Photo> pictureList;
     private Context pictureContx;
     private onClickedListener clickedListener;
 
-    public PhotoAdapter(ArrayList<Photo> pictureList, Context pictureContx) {
+    public PhotoAdapter(ArrayList<Photo> pictureList, Context pictureContx, onClickedListener clickedListener) {
         this.pictureList = pictureList;
         this.pictureContx = pictureContx;
-       // this.clickedListener = clickedListener;
+        this.clickedListener = clickedListener;
     }
 
     @NonNull
@@ -46,12 +51,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
                 .centerCrop()
                 .into(holder.picture);
 
-       // setTransitionName(holder.picture, String.valueOf(position) + "_image");
+        setTransitionName(holder.picture, String.valueOf(position) + "_image");
 
         holder.picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickedListener.onPicClicked(holder,position, pictureList);
+                clickedListener.onPicClicked(holder, position, pictureList);
             }
         });
 
@@ -62,7 +67,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
         return pictureList.size();
     }
 
-    public class PicHolder extends RecyclerView.ViewHolder{
+    public class PicHolder extends RecyclerView.ViewHolder {
 
         public ImageView picture;
 

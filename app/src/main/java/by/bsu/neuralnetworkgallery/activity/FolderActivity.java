@@ -6,12 +6,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.adapter.PhotoAdapter;
 import by.bsu.neuralnetworkgallery.entity.Photo;
+import by.bsu.neuralnetworkgallery.utils.PhotoFragment;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.transition.Fade;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -40,7 +43,7 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
 
 
         allpictures = getAllImagesByFolder(folderPath);
-        recyclerView.setAdapter(new PhotoAdapter(allpictures, FolderActivity.this));
+        recyclerView.setAdapter(new PhotoAdapter(allpictures, FolderActivity.this, this));
     }
 
     public ArrayList<Photo> getAllImagesByFolder(String path) {
@@ -76,7 +79,16 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
 
     @Override
     public void onPicClicked(PhotoAdapter.PicHolder holder, int position, ArrayList<Photo> pics) {
+        PhotoFragment photoFragment = PhotoFragment.newInstance(pics, position, FolderActivity.this);
+        photoFragment.setEnterTransition(new Fade());
+        photoFragment.setExitTransition(new Fade());
 
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(holder.picture, position+"picture")
+                .add(R.id.displayContainer, photoFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override

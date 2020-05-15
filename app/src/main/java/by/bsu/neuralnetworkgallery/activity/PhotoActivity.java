@@ -5,6 +5,7 @@ import androidx.palette.graphics.Palette;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -20,7 +21,7 @@ import com.bumptech.glide.request.target.Target;
 import java.io.File;
 
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends Activity {
 
     public static final String EXTRA_SPACE_PHOTO = "SpacePhotoActivity.SPACE_PHOTO";
 

@@ -30,7 +30,7 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.ArrayList;
 
-public class GalleryActivity extends AppCompatActivity implements onClickedListener {
+public class GalleryActivity extends Activity implements onClickedListener {
     RecyclerView recyclerView;
 
     @Override

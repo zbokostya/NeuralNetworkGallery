@@ -11,4 +11,9 @@
         app:srcCompat="@drawable/ic_cloud_off_red"
         android:id="@+id/image" />
 
+
+    <!--android:transitionName="picture"
+    tools:ignore="ContentDescription,UnusedAttribute"-->
+
+
 </RelativeLayout>
