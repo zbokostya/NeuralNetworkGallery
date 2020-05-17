@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.transition.Fade;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import java.io.File;
@@ -45,9 +46,14 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.hasFixedSize();
 
+        TextView empty = findViewById(R.id.foldersEmpty);
 
         allpictures = getAllImagesByFolder(folderPath);
-        recyclerView.setAdapter(new PhotoAdapter(allpictures, FolderActivity.this, this));
+        if(allpictures.size() == 0) {
+            empty.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setAdapter(new PhotoAdapter(allpictures, FolderActivity.this, this));
+        }
     }
 
     public ArrayList<Photo> getAllImagesByFolder(String path) {

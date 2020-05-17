@@ -43,7 +43,7 @@ public class GalleryActivity extends Activity implements onClickedListener {
         recyclerView.hasFixedSize();
         ArrayList<Folder> folderArrayList = getPicturePaths();
         RecyclerView.Adapter folderAdapter = new PhotoFolderAdapter(folderArrayList, GalleryActivity.this, this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setAdapter(folderAdapter);
 
     }
