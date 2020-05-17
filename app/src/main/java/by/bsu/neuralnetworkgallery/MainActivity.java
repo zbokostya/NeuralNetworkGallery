@@ -22,11 +22,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
+
 
 
 
@@ -35,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Button showGalleryBtn = findViewById(R.id.btn_show_gallery);
         showGalleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent changeImageIntent = new Intent(MainActivity.this, EditActivity.class);
+                changeImageIntent.putExtra("image_path","content://media/external/images/media/252215");
                 startActivity(changeImageIntent);
             }
         });

@@ -30,7 +30,7 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.ArrayList;
 
-public class GalleryActivity extends Activity implements onClickedListener {
+public class GalleryActivity extends AppCompatActivity implements onClickedListener {
     RecyclerView recyclerView;
 
     @Override
@@ -45,7 +45,6 @@ public class GalleryActivity extends Activity implements onClickedListener {
         RecyclerView.Adapter folderAdapter = new PhotoFolderAdapter(folderArrayList, GalleryActivity.this, this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setAdapter(folderAdapter);
-
     }
 
 

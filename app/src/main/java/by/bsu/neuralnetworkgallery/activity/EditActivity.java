@@ -8,7 +8,9 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -17,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -24,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -41,7 +45,7 @@ import by.bsu.neuralnetworkgallery.dao.ServerConnector;
 import by.bsu.neuralnetworkgallery.dao.StyleReader;
 import by.bsu.neuralnetworkgallery.entity.Style;
 
-public class EditActivity extends Activity implements StyleAdapter.ItemClickListener {
+public class EditActivity extends AppCompatActivity implements StyleAdapter.ItemClickListener {
 
     Bitmap bitmap;
     ImageView image;
@@ -58,8 +62,16 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Edit photo");
         Button choose = findViewById(R.id.choose);
         image = findViewById(R.id.imageView);
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(getIntent().getStringExtra("image_path")));
+            image.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Button change = findViewById(R.id.change);
         recyclerView = findViewById(R.id.recycler_styles);
         progressBar = findViewById(R.id.progressBar);
@@ -97,6 +109,7 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
                 @SuppressLint("ResourceType")
                 @Override
                 public void handleMessage(Message msg) {
+                    id_post = "";
                     progressBar.setVisibility(View.INVISIBLE);
                     image.setImageBitmap(bitmap);
                     inProgress = false;
@@ -165,7 +178,7 @@ public class EditActivity extends Activity implements StyleAdapter.ItemClickList
 
         if (requestCode == 111 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri filePath = data.getData();
-
+            Toast.makeText(getApplicationContext(), filePath.toString(), Toast.LENGTH_LONG).show();
             try {
                 //getting image from gallery
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);

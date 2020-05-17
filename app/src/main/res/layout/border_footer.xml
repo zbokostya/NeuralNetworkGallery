@@ -2,11 +2,11 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"  android:layout_height="wrap_content" android:layout_width="wrap_content">
 
     <!-- we define background color -->
-    <solid android:color="#17212b" />
+    <solid android:color="@color/lightBlack" />
 
     <!-- we define border color and thick -->
     <stroke
-        android:width="4px"
+        android:width="2px"
         android:color="#040303" />
 
 </shape>

@@ -50,9 +50,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
                 .load(image.getPicturePath())
                 .centerCrop()
                 .into(holder.picture);
-
         setTransitionName(holder.picture, String.valueOf(position) + "_image");
-
         holder.picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
