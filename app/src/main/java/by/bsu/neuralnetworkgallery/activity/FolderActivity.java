@@ -1,6 +1,8 @@
 package by.bsu.neuralnetworkgallery.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import by.bsu.neuralnetworkgallery.R;
@@ -17,7 +19,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.transition.Fade;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,23 +33,20 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
     RecyclerView recyclerView;
     String folderPath;
     ArrayList<Photo> allpictures;
-    TextView folderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_folder);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("folderName"));
         folderPath = getIntent().getStringExtra("folderPath");
-
-        folderName = findViewById(R.id.foldername);
-        folderName.setText(getIntent().getStringExtra("folderName"));
-
         allpictures = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.hasFixedSize();
-
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final int widthCount = metrics.widthPixels / 180;
+        recyclerView.setLayoutManager(new GridLayoutManager(this, widthCount));
         TextView empty = findViewById(R.id.foldersEmpty);
 
         allpictures = getAllImagesByFolder(folderPath);
@@ -89,20 +90,23 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
 
     @Override
     public void onPicClicked(PhotoAdapter.PicHolder holder, int position, ArrayList<Photo> pics) {
-        PhotoFragment photoFragment = PhotoFragment.newInstance(pics, position, FolderActivity.this);
-        photoFragment.setEnterTransition(new Fade());
-        photoFragment.setExitTransition(new Fade());
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addSharedElement(holder.picture, position+"picture")
-                .add(R.id.displayContainer, photoFragment)
-                .addToBackStack(null)
-                .commit();
+        Intent intent = new Intent(FolderActivity.this, PhotoActivity.class);
+        intent.putExtra("folderPath", folderPath);
+        intent.putExtra("position", position);
+        startActivity(intent);
     }
 
     @Override
     public void onPicClicked(String pictureFolderPath, String folderName) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

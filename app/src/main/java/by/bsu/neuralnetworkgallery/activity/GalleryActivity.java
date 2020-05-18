@@ -18,12 +18,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -37,13 +39,15 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-
         recyclerView = findViewById(R.id.folderRecycler);
         //recyclerView.addItemDecoration(new ViewGroup.MarginLayoutParams(this));
         recyclerView.hasFixedSize();
         ArrayList<Folder> folderArrayList = getPicturePaths();
         RecyclerView.Adapter folderAdapter = new PhotoFolderAdapter(folderArrayList, GalleryActivity.this, this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final int widthCount = metrics.widthPixels / 240;
+        recyclerView.setLayoutManager(new GridLayoutManager(this, widthCount));
         recyclerView.setAdapter(folderAdapter);
     }
 

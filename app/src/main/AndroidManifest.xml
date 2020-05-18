@@ -18,9 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.EditActivity"
-            android:parentActivityName=".MainActivity"
             />
-        <activity android:name=".activity.FolderActivity"></activity>
+        <activity android:name=".activity.FolderActivity"
+            />
 
         <uses-library
             android:name="org.apache.http.legacy"

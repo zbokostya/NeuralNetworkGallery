@@ -1,6 +1,7 @@
 package by.bsu.neuralnetworkgallery.adapter;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Photo;
@@ -51,6 +53,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
                 .centerCrop()
                 .into(holder.picture);
         setTransitionName(holder.picture, String.valueOf(position) + "_image");
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((AppCompatActivity)holder.picture.getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final int widthCount = metrics.widthPixels / 180;
+        holder.picture.getLayoutParams().height= metrics.widthPixels / widthCount;
+        holder.picture.getLayoutParams().width= metrics.widthPixels / widthCount;
         holder.picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

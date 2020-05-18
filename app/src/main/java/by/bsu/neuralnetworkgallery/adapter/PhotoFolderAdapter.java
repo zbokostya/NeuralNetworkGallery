@@ -1,19 +1,25 @@
 package by.bsu.neuralnetworkgallery.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Folder;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -53,7 +59,11 @@ public class PhotoFolderAdapter extends RecyclerView.Adapter<PhotoFolderAdapter.
 
         String text = "(" + folder.getNumberOfPictures() + ") " + folder.getFolderName();
         holder.folderName.setText(text);
-
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((AppCompatActivity)holder.folderCard.getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final int widthCount = metrics.widthPixels / 240;
+        holder.folderCard.getLayoutParams().height= metrics.widthPixels / widthCount;
+        holder.folderCard.getLayoutParams().width= metrics.widthPixels / widthCount;
         holder.folderPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,12 +83,14 @@ public class PhotoFolderAdapter extends RecyclerView.Adapter<PhotoFolderAdapter.
         ImageView folderPic;
         TextView folderName;
         CardView folderCard;
+        RelativeLayout folderLayout;
 
         public FolderHolder(@NonNull View itemView) {
             super(itemView);
             folderPic = itemView.findViewById(R.id.folderPic);
             folderName = itemView.findViewById(R.id.folderName);
             folderCard = itemView.findViewById(R.id.folderCard);
+            folderLayout = itemView.findViewById(R.id.folderLayout);
         }
     }
 

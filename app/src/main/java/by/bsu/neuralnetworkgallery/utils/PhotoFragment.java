@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -97,7 +98,6 @@ public class PhotoFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-
                 if (previousSelected != -1) {
                     allImages.get(previousSelected).setSelected(false);
                     previousSelected = position;
