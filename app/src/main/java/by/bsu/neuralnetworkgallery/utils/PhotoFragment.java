@@ -137,6 +137,12 @@ public class PhotoFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+    }
+
     private class ImagesPagerAdapter extends PagerAdapter {
 
         @Override
@@ -148,7 +154,6 @@ public class PhotoFragment extends Fragment {
         @Override
         public Object instantiateItem(@NonNull ViewGroup containerCollection, int position) {
             LayoutInflater layoutinflater = (LayoutInflater) containerCollection.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
             View view = layoutinflater.inflate(R.layout.picture_browser_pager, null);
             image = view.findViewById(R.id.image);
            // textView = view.findViewById(R.id.textBrowser);

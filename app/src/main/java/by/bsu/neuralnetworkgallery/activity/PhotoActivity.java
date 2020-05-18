@@ -2,8 +2,11 @@ package by.bsu.neuralnetworkgallery.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.palette.graphics.Palette;
+import androidx.viewpager.widget.ViewPager;
+
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.adapter.PhotoAdapter;
+import by.bsu.neuralnetworkgallery.adapter.ViewPagerAdapter;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 import by.bsu.neuralnetworkgallery.utils.PhotoFragment;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
@@ -17,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,21 +34,23 @@ public class PhotoActivity extends AppCompatActivity{
 
     public static final String EXTRA_SPACE_PHOTO = "SpacePhotoActivity.SPACE_PHOTO";
 
-    private ImageView mImageView;
-    String imagePath;
-    String folderPath;
-    ArrayList<Photo> allpictures;
-    int position;
+   // private ImageView mImageView;
+    private String imagePath;
+    private String folderPath;
+    private ArrayList<Photo> allpictures;
+    private int position;
+    private ViewPager viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
    // String
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_detail);
+        setContentView(R.layout.activity_photo);
         folderPath = getIntent().getStringExtra("folderPath");
         position = getIntent().getIntExtra("position", 0);
-        mImageView = findViewById(R.id.image);
+        //mImageView = findViewById(R.id.image);
         //Photo spacePhoto =
-        mImageView.setTransitionName(position + "picture");
+        //mImageView.setTransitionName(position + "picture");
         /*Glide.with(this)
                 .load(spacePhoto.getUrl())
                 .asBitmap()
@@ -55,8 +61,12 @@ public class PhotoActivity extends AppCompatActivity{
 */
         allpictures = getAllImagesByFolder(folderPath);
 
-        mImageView.setImageURI(Uri.fromFile(new File(allpictures.get(position).getPicturePath())));
-        mImageView.setOnClickListener(new View.OnClickListener() {
+        //mImageView.setImageURI(Uri.fromFile(new File(allpictures.get(position).getPicturePath())));
+        viewPager = findViewById(R.id.viewPager);
+        viewPagerAdapter = new ViewPagerAdapter(this, allpictures);
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setCurrentItem(position);
+       /* mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PhotoFragment photoFragment = PhotoFragment.newInstance(allpictures, position, PhotoActivity.this);
@@ -69,7 +79,7 @@ public class PhotoActivity extends AppCompatActivity{
                         .addToBackStack(null)
                         .commit();
             }
-        });
+        });*/
     }
 
     public void setPosition(int position){
