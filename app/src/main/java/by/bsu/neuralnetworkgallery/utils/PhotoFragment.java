@@ -2,6 +2,8 @@ package by.bsu.neuralnetworkgallery.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -26,6 +29,10 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import by.bsu.neuralnetworkgallery.MainActivity;
 import by.bsu.neuralnetworkgallery.R;
+import by.bsu.neuralnetworkgallery.activity.EditActivity;
+import by.bsu.neuralnetworkgallery.activity.FolderActivity;
+import by.bsu.neuralnetworkgallery.activity.GalleryActivity;
+import by.bsu.neuralnetworkgallery.activity.PhotoActivity;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 
 import static androidx.core.view.ViewCompat.setTransitionName;
@@ -118,9 +125,14 @@ public class PhotoFragment extends Fragment {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Log.d("share","Clicked" );
+                Uri uri = Uri.fromFile(new File(allImages.get(previousSelected).getPicturePath()));
+                Log.d("file", uri.toString());
+                Intent move = new Intent(animeContx, EditActivity.class);
+                move.putExtra("image_path", uri.toString());
+                startActivity(move);
             }
         });
+
 
 
     }
@@ -162,6 +174,7 @@ public class PhotoFragment extends Fragment {
                     Log.d("Cliker", "Clicked123");
                 }
             });
+
 
 
             ((ViewPager) containerCollection).addView(view);

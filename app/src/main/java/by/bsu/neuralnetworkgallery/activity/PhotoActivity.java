@@ -72,6 +72,10 @@ public class PhotoActivity extends AppCompatActivity{
         });
     }
 
+    public void setPosition(int position){
+        this.position = position;
+    }
+
 
     public ArrayList<Photo> getAllImagesByFolder(String path) {
         ArrayList<Photo> images = new ArrayList<>();
