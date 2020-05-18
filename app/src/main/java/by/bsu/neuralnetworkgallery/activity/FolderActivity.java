@@ -92,6 +92,7 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
     public void onPicClicked(PhotoAdapter.PicHolder holder, int position, ArrayList<Photo> pics) {
         Intent intent = new Intent(FolderActivity.this, PhotoActivity.class);
         intent.putExtra("folderPath", folderPath);
+        intent.putExtra("folderName", getIntent().getStringExtra("folderName"));
         intent.putExtra("position", position);
         startActivity(intent);
     }

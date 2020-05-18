@@ -22,7 +22,7 @@ public class ImageWriter {
         int second = calendar.get(Calendar.SECOND);
         final String fileName = "IMG_" + year + "" + month + "" + day + "_" + hour + "" + minute + "" + second + ".png";
         try {
-            File dir = new File(file + "/Pictures/NeuralNetworkGallery/");
+            File dir = new File(file + "/Pictures/Gallery/");
             dir.mkdirs();
             File write = new File(dir, fileName);
             FileOutputStream out = new FileOutputStream(write);

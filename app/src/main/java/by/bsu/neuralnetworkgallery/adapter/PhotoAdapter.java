@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Photo;
@@ -56,8 +58,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
         DisplayMetrics metrics = new DisplayMetrics();
         ((AppCompatActivity)holder.picture.getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         final int widthCount = metrics.widthPixels / 180;
-        holder.picture.getLayoutParams().height= metrics.widthPixels / widthCount;
-        holder.picture.getLayoutParams().width= metrics.widthPixels / widthCount;
+        holder.cardView.getLayoutParams().height= metrics.widthPixels / widthCount;
+        holder.cardView.getLayoutParams().width= metrics.widthPixels / widthCount;
         holder.picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,11 +76,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
 
     public class PicHolder extends RecyclerView.ViewHolder {
 
-        public ImageView picture;
+        ImageView picture;
+        CardView cardView;
 
         PicHolder(@NonNull View itemView) {
             super(itemView);
-
+            cardView = itemView.findViewById(R.id.cardView);
             picture = itemView.findViewById(R.id.image);
         }
     }

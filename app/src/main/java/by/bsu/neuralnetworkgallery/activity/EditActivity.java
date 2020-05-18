@@ -1,28 +1,15 @@
 package by.bsu.neuralnetworkgallery.activity;
 
-import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -31,15 +18,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
-import by.bsu.neuralnetworkgallery.MainActivity;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.adapter.StyleAdapter;
 import by.bsu.neuralnetworkgallery.dao.ImageWriter;
@@ -66,7 +49,6 @@ public class EditActivity extends AppCompatActivity implements StyleAdapter.Item
         setContentView(R.layout.activity_edit);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit photo");
-        Button choose = findViewById(R.id.choose);
         image = findViewById(R.id.imageView);
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(getIntent().getStringExtra("image_path")));
@@ -85,15 +67,6 @@ public class EditActivity extends AppCompatActivity implements StyleAdapter.Item
             }
         });
 
-        choose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_PICK);
-                startActivityForResult(Intent.createChooser(intent, "Select Image"), 111);
-            }
-        });
     }
 
 
@@ -120,6 +93,7 @@ public class EditActivity extends AppCompatActivity implements StyleAdapter.Item
                     previouslySelected = null;
                     ImageWriter writer = new ImageWriter();
                     writer.writeFile(bitmap);
+                    Toast.makeText(getApplicationContext(), "Successfully saved to " + Environment.getExternalStorageDirectory() + "/Pictures/Gallery/", Toast.LENGTH_LONG).show();
                 }
             };
             Thread thread = new Thread(new Runnable() {
@@ -174,25 +148,6 @@ public class EditActivity extends AppCompatActivity implements StyleAdapter.Item
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 111 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri filePath = data.getData();
-            Toast.makeText(getApplicationContext(), filePath.toString(), Toast.LENGTH_LONG).show();
-            try {
-                //getting image from gallery
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-
-                //Setting image to ImageView
-                image.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
 
 
     @SuppressLint("ResourceType")

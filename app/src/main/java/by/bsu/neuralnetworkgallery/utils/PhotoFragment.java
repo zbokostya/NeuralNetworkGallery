@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextClock;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -23,16 +19,12 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import by.bsu.neuralnetworkgallery.MainActivity;
+
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.activity.EditActivity;
-import by.bsu.neuralnetworkgallery.activity.FolderActivity;
-import by.bsu.neuralnetworkgallery.activity.GalleryActivity;
-import by.bsu.neuralnetworkgallery.activity.PhotoActivity;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 
 import static androidx.core.view.ViewCompat.setTransitionName;

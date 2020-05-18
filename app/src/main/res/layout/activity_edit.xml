@@ -37,17 +37,6 @@
         tools:visibility="invisible" />
 
     <Button
-        android:id="@+id/choose"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/camera_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/change"
         android:layout_width="65dp"
         android:layout_height="65dp"
