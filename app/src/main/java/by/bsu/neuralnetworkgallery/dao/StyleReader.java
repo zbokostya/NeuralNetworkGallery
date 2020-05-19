@@ -22,7 +22,7 @@ import java.util.Map;
 import by.bsu.neuralnetworkgallery.entity.Style;
 
 public class StyleReader {
-    final private String X_API_KEY = "BpHLR5UQF07dAlOuG3ixd3dCUZUdKWFa4rB3DlmT";
+    final private String X_API_KEY = "ra64ysKo6o2dTe0Dk9Qnv3jLNY3p3z5z1PGN6vJH";
     final private String STYLES_URL = "https://api.deeparteffects.com/v1/noauth/styles";
     private ArrayList<Style> styles = new ArrayList<>();
     private boolean ready = false;
