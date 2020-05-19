@@ -2,6 +2,7 @@ package by.bsu.neuralnetworkgallery.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,9 +46,19 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
         recyclerView = findViewById(R.id.folderRecycler);
         //recyclerView.addItemDecoration(new ViewGroup.MarginLayoutParams(this));
         recyclerView.hasFixedSize();
-        ActivityCompat.requestPermissions(GalleryActivity.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(GalleryActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+        }else{
+            init();
+        }
+
+
+
+    }
+
+    void init(){
         ArrayList<Folder> folderArrayList = getPicturePaths();
         RecyclerView.Adapter folderAdapter = new PhotoFolderAdapter(folderArrayList, GalleryActivity.this, this);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -56,6 +67,7 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
         recyclerView.setLayoutManager(new GridLayoutManager(this, widthCount));
         recyclerView.setAdapter(folderAdapter);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -63,6 +75,7 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
             case 1: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    init();
                 } else {
                     Toast.makeText(GalleryActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
                 }
