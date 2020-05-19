@@ -57,7 +57,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PicHolder> {
         setTransitionName(holder.picture, String.valueOf(position) + "_image");
         DisplayMetrics metrics = new DisplayMetrics();
         ((AppCompatActivity)holder.picture.getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        final int widthCount = metrics.widthPixels / 180;
+        final int widthCount = metrics.widthPixels / 240;
         holder.cardView.getLayoutParams().height= metrics.widthPixels / widthCount;
         holder.cardView.getLayoutParams().width= metrics.widthPixels / widthCount;
         holder.picture.setOnClickListener(new View.OnClickListener() {

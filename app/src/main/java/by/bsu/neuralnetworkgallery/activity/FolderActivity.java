@@ -45,7 +45,7 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
         recyclerView = findViewById(R.id.recycler);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        final int widthCount = metrics.widthPixels / 180;
+        final int widthCount = metrics.widthPixels / 240;
         recyclerView.setLayoutManager(new GridLayoutManager(this, widthCount));
         TextView empty = findViewById(R.id.foldersEmpty);
 

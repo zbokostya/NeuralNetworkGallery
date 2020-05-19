@@ -50,7 +50,13 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
             ActivityCompat.requestPermissions(GalleryActivity.this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     1);
-        }else{
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(GalleryActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    2);
+        }
+        else{
             init();
         }
 
@@ -75,9 +81,16 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
             case 1: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    Log.e("permissions", "permission denied");
+                }
+            }
+            case 2: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     init();
                 } else {
-                    Toast.makeText(GalleryActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                    Log.e("permissions", "permission denied");
                 }
                 return;
             }
