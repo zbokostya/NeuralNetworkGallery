@@ -59,9 +59,12 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
         else{
             init();
         }
+    }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        init();
     }
 
     void init(){
@@ -76,7 +79,7 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 1: {
                 if (grantResults.length > 0

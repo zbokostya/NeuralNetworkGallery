@@ -9,7 +9,6 @@ import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.adapter.PhotoAdapter;
 import by.bsu.neuralnetworkgallery.adapter.ViewPagerAdapter;
 import by.bsu.neuralnetworkgallery.entity.Photo;
-import by.bsu.neuralnetworkgallery.utils.PhotoFragment;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
 import android.app.Activity;
@@ -30,6 +29,8 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class PhotoActivity extends AppCompatActivity{
@@ -84,11 +85,7 @@ public class PhotoActivity extends AppCompatActivity{
                 images.add(pic);
             } while (cursor.moveToNext());
             cursor.close();
-            ArrayList<Photo> reSelection = new ArrayList<>();
-            for (int i = images.size() - 1; i > -1; i--) {
-                reSelection.add(images.get(i));
-            }
-            images = reSelection;
+            Collections.reverse(images);
         } catch (Exception e) {
             e.printStackTrace();
         }
