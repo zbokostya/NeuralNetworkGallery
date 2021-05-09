@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -29,12 +32,12 @@ import by.bsu.neuralnetworkgallery.activity.EditActivity;
 import by.bsu.neuralnetworkgallery.activity.PhotoActivity;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 import by.bsu.neuralnetworkgallery.utils.ImageGestureDetector;
+import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
 public class ViewPagerAdapter extends PagerAdapter {
     private AppCompatActivity activity;
     private LayoutInflater inflater;
     private ArrayList<Photo> photos;
-    private boolean show = true;
 
     public ViewPagerAdapter(AppCompatActivity activity, ArrayList<Photo> photos) {
         this.activity = activity;
@@ -47,44 +50,17 @@ public class ViewPagerAdapter extends PagerAdapter {
         inflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.viewpager_item, container, false);
         ImageView imageView = view.findViewById(R.id.viewPagerImage);
-        final Button button = view.findViewById(R.id.edit);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, EditActivity.class);
-                Uri uri = Uri.fromFile(new File(photos.get(position).getPicturePath()));
-                intent.putExtra("image_path", uri.toString());
-                activity.startActivity(intent);
-            }
-        });
         Glide.with(activity.getApplicationContext())
                 .load(photos.get(position).getPicturePath())
                 .into(imageView);
         container.addView(view);
-        /*imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.getSupportActionBar().setShowHideAnimationEnabled(false);
-                if (show) {
-                    activity.getSupportActionBar().hide();
-                    button.setVisibility(View.INVISIBLE);
-                    show = false;
-                } else {
-                    activity.getSupportActionBar().show();
-                    button.setVisibility(View.VISIBLE);
-                    show = true;
-                }
-            }
-        });*/
-        ConstraintLayout photoLayout = activity.findViewById(R.id.photoLayout);
-        ScaleGestureDetector detector = new ScaleGestureDetector(imageView.getContext(), new ImageGestureDetector(imageView));
-        GestureDetector detector1 = new GestureDetector(imageView.getContext(), new ImageGestureDetector(imageView));
+        ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(imageView.getContext(), new ImageGestureDetector(imageView, activity));
+        GestureDetector gestureDetector = new GestureDetector(imageView.getContext(), new ImageGestureDetector(imageView, activity));
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //Log.d("test", motionEvent.getEventTime()+"  "+motionEvent.getAction());
-                detector.onTouchEvent(motionEvent);
-                detector1.onTouchEvent(motionEvent);
+                scaleGestureDetector.onTouchEvent(motionEvent);
+                gestureDetector.onTouchEvent(motionEvent);
                 return true;
             }
 
@@ -107,4 +83,5 @@ public class ViewPagerAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         ((ViewPager) container).removeView((View) object);
     }
+
 }

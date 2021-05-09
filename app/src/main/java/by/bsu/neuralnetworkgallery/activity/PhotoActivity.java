@@ -3,9 +3,12 @@ package by.bsu.neuralnetworkgallery.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import by.bsu.neuralnetworkgallery.R;
+import by.bsu.neuralnetworkgallery.adapter.BottomCarouselAdapter;
 import by.bsu.neuralnetworkgallery.adapter.PhotoAdapter;
 import by.bsu.neuralnetworkgallery.adapter.ViewPagerAdapter;
 import by.bsu.neuralnetworkgallery.entity.Photo;
@@ -28,6 +31,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import java.io.File;
@@ -36,7 +40,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 
-public class PhotoActivity extends AppCompatActivity{
+public class PhotoActivity extends AppCompatActivity implements onClickedListener{
 
     public static final String EXTRA_SPACE_PHOTO = "SpacePhotoActivity.SPACE_PHOTO";
 
@@ -47,8 +51,10 @@ public class PhotoActivity extends AppCompatActivity{
     private int position;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
+    private final int[] allPhotos = {R.drawable.picture1, R.drawable.picture2, R.drawable.picture3, R.drawable.picture4, R.drawable.picture5, R.drawable.picture6};
+    private RecyclerView recyclerView;
 
-   // String
+    // String
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +68,10 @@ public class PhotoActivity extends AppCompatActivity{
         viewPagerAdapter = new ViewPagerAdapter(this, allpictures);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setCurrentItem(position);
+        RecyclerView.Adapter bottomCarouselAdapter = new BottomCarouselAdapter(allPhotos, this, this);
+        recyclerView = findViewById(R.id.recyclerViewBottom);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerView.setAdapter(bottomCarouselAdapter);
     }
 
     public void setPosition(int position){
@@ -105,4 +115,18 @@ public class PhotoActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onPicClicked(PhotoAdapter.PicHolder holder, int position, ArrayList<Photo> pics) {
+
+    }
+
+    @Override
+    public void onPicClicked(String pictureFolderPath, String folderName) {
+
+    }
+
+    @Override
+    public void onPicClicked(String settingId) {
+        Toast.makeText(this, settingId, Toast.LENGTH_LONG).show();
+    }
 }

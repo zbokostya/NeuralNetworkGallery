@@ -161,4 +161,9 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
         //move.putExtra("recyclerItemSize",getCardsOptimalWidth(4));
         startActivity(move);
     }
+
+    @Override
+    public void onPicClicked(String settingId) {
+
+    }
 }

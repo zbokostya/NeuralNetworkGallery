@@ -8,4 +8,5 @@ import by.bsu.neuralnetworkgallery.entity.Photo;
 public interface onClickedListener {
     void onPicClicked(PhotoAdapter.PicHolder holder, int position, ArrayList<Photo> pics);
     void onPicClicked(String pictureFolderPath,String folderName);
+    void onPicClicked(String settingId);
 }
