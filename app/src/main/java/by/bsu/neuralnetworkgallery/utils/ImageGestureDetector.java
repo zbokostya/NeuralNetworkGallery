@@ -1,63 +1,89 @@
 package by.bsu.neuralnetworkgallery.utils;
 
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Toast;
 
-public class ImageGestureDetector implements View.OnTouchListener {
+public class ImageGestureDetector implements View.OnTouchListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleGestureDetector.OnScaleGestureListener {
 
-    private float mMotionDownX, mMotionDownY;
-    private ScaleGestureDetector mScaleGestureDetector;
-    private GestureDetector mGestureDetector;
-    private View mView;
-    private Float mScaleFactor = 1f;
+    float onScaleBegin = 0;
+    float onScaleEnd = 0;
+    private float scale = 1f;
+    View imageView;
 
-    public ImageGestureDetector(View view) {
-        mGestureDetector = new GestureDetector(view.getContext(), mGestureListener);
-        mScaleGestureDetector = new ScaleGestureDetector(view.getContext(), mScaleGestureListener);
-        mView = view;
+    public ImageGestureDetector(View imageView) {
+        this.imageView = imageView;
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        this.mGestureDetector.onTouchEvent(event);
-        this.mScaleGestureDetector.onTouchEvent(event);
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
         return true;
     }
 
-    private GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
-        @Override
-        public boolean onDown(MotionEvent e) {
-            mMotionDownX = e.getRawX() - mView.getTranslationX();
-            mMotionDownY = e.getRawY() - mView.getTranslationY();
-            return true;
-        }
+    @Override
+    public boolean onDoubleTap(MotionEvent motionEvent) {
+        return false;
+    }
 
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (e1.getPointerId(0) != e2.getPointerId(0))
-                return false;
-            //if(Math.abs(e2.getRawY() - e1.getRawY())>350&&e2.getAction()==MotionEvent.)
-            return true;
-        }
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+        return false;
+    }
 
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            return true;
-        }
-    };
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
 
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+    }
 
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
 
-    private ScaleGestureDetector.OnScaleGestureListener mScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-            mScaleFactor = Math.max(0.5f, Math.min(mScaleFactor, 5.0f));
-            mView.setScaleX(mScaleFactor);
-            mView.setScaleY(mScaleFactor);
-            return true;
-        }
-    };
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+//        if (scale)
+        scale *= scaleGestureDetector.getScaleFactor();
+        imageView.setScaleX(scale);
+        imageView.setScaleY(scale);
+        return true;
+    }
+
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+        onScaleBegin = scale;
+        return true;
+    }
+
+    @Override
+    public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+        onScaleEnd = scale;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return true;
+    }
+
 }

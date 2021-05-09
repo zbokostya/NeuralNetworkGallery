@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.activity.EditActivity;
+import by.bsu.neuralnetworkgallery.activity.PhotoActivity;
 import by.bsu.neuralnetworkgallery.entity.Photo;
 import by.bsu.neuralnetworkgallery.utils.ImageGestureDetector;
 
@@ -57,7 +61,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                 .load(photos.get(position).getPicturePath())
                 .into(imageView);
         container.addView(view);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        /*imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 activity.getSupportActionBar().setShowHideAnimationEnabled(false);
@@ -71,9 +75,23 @@ public class ViewPagerAdapter extends PagerAdapter {
                     show = true;
                 }
             }
+        });*/
+        ConstraintLayout photoLayout = activity.findViewById(R.id.photoLayout);
+        ScaleGestureDetector detector = new ScaleGestureDetector(imageView.getContext(), new ImageGestureDetector(imageView));
+        GestureDetector detector1 = new GestureDetector(imageView.getContext(), new ImageGestureDetector(imageView));
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //Log.d("test", motionEvent.getEventTime()+"  "+motionEvent.getAction());
+                detector.onTouchEvent(motionEvent);
+                detector1.onTouchEvent(motionEvent);
+                return true;
+            }
+
         });
         return view;
     }
+
 
     @Override
     public int getCount() {

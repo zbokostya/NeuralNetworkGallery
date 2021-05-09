@@ -9,6 +9,7 @@ import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.adapter.PhotoAdapter;
 import by.bsu.neuralnetworkgallery.adapter.ViewPagerAdapter;
 import by.bsu.neuralnetworkgallery.entity.Photo;
+import by.bsu.neuralnetworkgallery.utils.ImageGestureDetector;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
 import android.app.Activity;
@@ -22,6 +23,8 @@ import android.provider.MediaStore;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -44,6 +47,7 @@ public class PhotoActivity extends AppCompatActivity{
     private int position;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
+
    // String
     @Override
     protected void onCreate(Bundle savedInstanceState) {
