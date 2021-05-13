@@ -1,10 +1,10 @@
 package by.bsu.neuralnetworkgallery.utils;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyLog;
+
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
@@ -20,24 +20,25 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 public class MultipartRequest extends Request<String> {
 
     MultipartEntityBuilder entity = MultipartEntityBuilder.create();
     HttpEntity httpentity;
-    private String FILE_PART_NAME = "files";
+    private List<String> FILE_PART_NAME;
 
     private final Response.Listener<String> mListener;
-    private final File mFilePart;
+    private final List<File> mFilePart;
     private final Map<String, String> mStringPart;
     private final MultipartProgressListener multipartProgressListener;
-    private long fileLength = 0L;
+    private List<Long> fileLength;
 
     public MultipartRequest(String url, Response.ErrorListener errorListener,
-                            Response.Listener<String> listener, File file, long fileLength,
+                            Response.Listener<String> listener, List<File> file, List<Long> fileLength,
                             Map<String, String> mStringPart,
-                            final Map<String, String> headerParams, String partName,
+                            final Map<String, String> headerParams, List<String> partName,
                             MultipartProgressListener progLitener) {
         super(Method.POST, url, errorListener);
 
@@ -65,7 +66,10 @@ public class MultipartRequest extends Request<String> {
     // }
 
     private void buildMultipartEntity() {
-        entity.addPart(FILE_PART_NAME, new FileBody(mFilePart, ContentType.create("image/gif"), mFilePart.getName()));
+        for(int i = 0; i < mFilePart.size(); i++ ){
+            entity.addPart(FILE_PART_NAME.get(i), new FileBody(mFilePart.get(i), ContentType.create("image/gif"), mFilePart.get(i).getName()));
+        }
+
         if (mStringPart != null) {
             for (Map.Entry<String, String> entry : mStringPart.entrySet()) {
                 entity.addTextBody(entry.getKey(), entry.getValue());
@@ -82,8 +86,11 @@ public class MultipartRequest extends Request<String> {
     public byte[] getBody() throws AuthFailureError {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
-            httpentity.writeTo(new CountingOutputStream(bos, fileLength,
-                    multipartProgressListener));
+            for (Long aLong : fileLength) {
+                httpentity.writeTo(new CountingOutputStream(bos, aLong,
+                        multipartProgressListener));
+            }
+
         } catch (IOException e) {
             VolleyLog.e("IOException writing to ByteArrayOutputStream");
         }

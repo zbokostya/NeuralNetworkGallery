@@ -31,8 +31,11 @@ import java.util.List;
 
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Style;
+import by.bsu.neuralnetworkgallery.utils.RequestQueueSingleton;
 
 public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> {
+
+    private final String GET_URL = "http://51.15.53.117:9901/api/userfiles/styles";
 
     private List<Style> mData;
     private LayoutInflater mInflater;
@@ -55,6 +58,7 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
     }
 
 
+
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,22 +66,23 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
+
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData.get(position).getTitle();
-        holder.myTextView.setText(animal);
-        String footer = mData.get(position).getDescription();
-        holder.myTextView2.setText(footer);
-        getResult(mData.get(position).getUrl(), holder.myImageView);
+//        String animal = mData.get(position).;
+//        holder.myTextView.setText(animal);
+//        String footer = mData.get(position).getDescription();
+//        holder.myTextView2.setText(footer);
+//        mData =
+        if (position != 0)
+            getResult(position + "", holder.myImageView);
     }
 
-    private void getResult(String url, final ImageView imageView) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
+    private void getResult(String filename, final ImageView imageView) {
+        ImageRequest imageRequest = new ImageRequest(GET_URL + "?id=" + filename, new Response.Listener<Bitmap>() {
             @Override
-            public void onResponse(final Bitmap response) {
-                Log.i("ServerConnection", "image get success");
+            public void onResponse(Bitmap response) {
                 imageView.setImageBitmap(response);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -92,7 +97,29 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
                 Log.i("ServerConnection", "image get error: " + error.toString());
             }
         });
-        queue.add(imageRequest);
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(imageRequest);
+
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
+//            @Override
+//            public void onResponse(final Bitmap response) {
+//                Log.i("ServerConnection", "image get success");
+//                imageView.setImageBitmap(response);
+//                imageView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        zoomImageFromThumb(imageView, response);
+//                    }
+//                });
+//            }
+//        }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.i("ServerConnection", "image get error: " + error.toString());
+//            }
+//        });
+//        queue.add(imageRequest);
     }
 
     // total number of rows
@@ -252,6 +279,10 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
+        public void setImageView(ImageView myImageView) {
+            this.myImageView = myImageView;
+        }
+
         @SuppressLint("ResourceType")
         @Override
         public void onClick(View view) {
@@ -262,7 +293,8 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
     }
 
     public String getItem(int id) {
-        return mData.get(id).getTitle();
+//        return mData.get(id).getBitmap();
+        return "";
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {

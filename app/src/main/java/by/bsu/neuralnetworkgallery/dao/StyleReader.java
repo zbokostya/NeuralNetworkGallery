@@ -1,13 +1,17 @@
 package by.bsu.neuralnetworkgallery.dao;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -17,13 +21,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.entity.Style;
+import by.bsu.neuralnetworkgallery.utils.RequestQueueSingleton;
 
 public class StyleReader {
-    final private String X_API_KEY = "ra64ysKo6o2dTe0Dk9Qnv3jLNY3p3z5z1PGN6vJH";
-    final private String STYLES_URL = "https://api.deeparteffects.com/v1/noauth/styles";
+    final private String STYLES_URL = "http://51.15.53.117:9901/api/userfiles/styles";
     private ArrayList<Style> styles = new ArrayList<>();
     private boolean ready = false;
 
@@ -31,55 +37,54 @@ public class StyleReader {
     public void read(Context context) {
         ready = false;
         styles.clear();
+        styles.add(new Style("0", "0"));
         Log.i("StyleReader", "get styles");
-        RequestQueue queue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, STYLES_URL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    parse(response);
-                } catch (JSONException e) {
-                    Log.i("StyleReader", "error in parsing");
-                    e.printStackTrace();
-                }
-                Log.i("StyleReader", "get styles success");
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("StyleReader", "error in getting styles: " + error.toString());
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-Api-Key", X_API_KEY);
-                return params;
-            }
-        };
-        queue.add(request);
+        ready = true;
+        for (int i = 1; i < 7; i++) {
+            styles.add(new Style("0", i + ""));
+        }
+        ready = true;
+//            int finalI = i;
+//            ImageRequest imageRequest = new ImageRequest(STYLES_URL + "?originalName=" + "prepared_style_" + i + ".jpg", new Response.Listener<Bitmap>() {
+//                @Override
+//                public void onResponse(Bitmap response) {
+//                    Log.i("ServerConnection", "image get success");
+//                    styles.add(new Style(response, finalI + ""));
+//                    if (finalI == 6) {
+//                        ready = true;
+//                    }
+//                }
+//            }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    Log.i("ServerConnection", "image get error: " + error.toString());
+//                }
+//            });
+//            RequestQueueSingleton.getInstance(context).addToRequestQueue(imageRequest);
+
+
     }
 
-    public boolean isReady(){
+    public boolean isReady() {
         return ready;
     }
 
-    public ArrayList<Style> getStyles(){
+    public ArrayList<Style> getStyles() {
         return styles;
     }
 
-    private void parse(JSONObject object) throws JSONException {
-        JSONArray styles = object.getJSONArray("styles");
-        for (int i = 0; i < styles.length(); ++i) {
-            Style style = new Style.Builder()
-                    .withId(styles.getJSONObject(i).getString("id"))
-                    .withTitle(styles.getJSONObject(i).getString("title"))
-                    .withUrl(styles.getJSONObject(i).getString("url"))
-                    .withDescription(styles.getJSONObject(i).getString("description"))
-                    .build();
-            this.styles.add(style);
-        }
-        ready = true;
-        Log.i("StyleReader", "Read " + this.styles.size() + " styles");
-    }
+//    private void parse(JSONObject object) throws JSONException {
+//        JSONArray styles = object.getJSONArray("styles");
+//        for (int i = 0; i < styles.length(); ++i) {
+//            Style style = new Style.Builder()
+//                    .withId(styles.getJSONObject(i).getString("id"))
+//                    .withTitle(styles.getJSONObject(i).getString("title"))
+//                    .withUrl(styles.getJSONObject(i).getString("url"))
+//                    .withDescription(styles.getJSONObject(i).getString("description"))
+//                    .build();
+//            this.styles.add(style);
+//        }
+//        ready = true;
+//        Log.i("StyleReader", "Read " + this.styles.size() + " styles");
+//    }
 }

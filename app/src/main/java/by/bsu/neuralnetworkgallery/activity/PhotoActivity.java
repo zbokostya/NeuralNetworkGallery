@@ -41,11 +41,11 @@ import java.util.Collection;
 import java.util.Collections;
 
 
-public class PhotoActivity extends AppCompatActivity implements onClickedListener{
+public class PhotoActivity extends AppCompatActivity implements onClickedListener {
 
     public static final String EXTRA_SPACE_PHOTO = "SpacePhotoActivity.SPACE_PHOTO";
 
-   // private ImageView mImageView;
+    // private ImageView mImageView;
     private String imagePath;
     private String folderPath;
     private ArrayList<Photo> allpictures;
@@ -75,7 +75,7 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
         recyclerView.setAdapter(bottomCarouselAdapter);
     }
 
-    public void setPosition(int position){
+    public void setPosition(int position) {
         this.position = position;
     }
 
@@ -131,6 +131,13 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
         if (position == 0) {
             Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
             move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+            startActivity(move);
+        }
+
+        if (position == 4) {
+            Intent move = new Intent(PhotoActivity.this, EditActivity.class);
+            move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+            move.putExtra("image_name",  allpictures.get(viewPager.getCurrentItem()).getPictureName());
             startActivity(move);
         }
     }
