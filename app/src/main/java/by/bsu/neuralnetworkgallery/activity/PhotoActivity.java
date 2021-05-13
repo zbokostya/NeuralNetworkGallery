@@ -16,6 +16,7 @@ import by.bsu.neuralnetworkgallery.utils.ImageGestureDetector;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -51,7 +52,7 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
     private int position;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    private final int[] allPhotos = {R.drawable.picture1, R.drawable.picture2, R.drawable.picture3, R.drawable.picture4, R.drawable.picture5, R.drawable.picture6};
+    private final int[] allPhotos = {R.drawable.picture111, R.drawable.picture2, R.drawable.picture3, R.drawable.picture4, R.drawable.picture5, R.drawable.picture6};
     private RecyclerView recyclerView;
 
     // String
@@ -126,7 +127,11 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
     }
 
     @Override
-    public void onPicClicked(String settingId) {
-        Toast.makeText(this, settingId, Toast.LENGTH_LONG).show();
+    public void onPicClicked(int position) {
+        if (position == 0) {
+            Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
+            move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+            startActivity(move);
+        }
     }
 }

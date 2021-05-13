@@ -42,7 +42,7 @@ public class BottomCarouselAdapter extends RecyclerView.Adapter<BottomCarouselAd
     @Override
     public void onBindViewHolder(@NonNull SettingsHolder holder, int position) {
         holder.settingPic.setImageResource(allPhotos[position]);
-        holder.settingName.setText(position+"PIDOR");
+        holder.settingName.setText(position+"");
         DisplayMetrics metrics = new DisplayMetrics();
         carouselContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         final int widthCount = metrics.widthPixels / 160;
@@ -51,7 +51,7 @@ public class BottomCarouselAdapter extends RecyclerView.Adapter<BottomCarouselAd
         holder.settingPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickedListener.onPicClicked(position+"PIDOR");
+                onClickedListener.onPicClicked(position);
             }
         });
     }

@@ -163,7 +163,7 @@ public class GalleryActivity extends AppCompatActivity implements onClickedListe
     }
 
     @Override
-    public void onPicClicked(String settingId) {
+    public void onPicClicked(int position) {
 
     }
 }

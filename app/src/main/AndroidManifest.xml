@@ -22,6 +22,8 @@
             />
         <activity android:name=".activity.FolderActivity"
             />
+        <activity android:name=".activity.ImageEditActivity"
+            />
 
         <uses-library
             android:name="org.apache.http.legacy"

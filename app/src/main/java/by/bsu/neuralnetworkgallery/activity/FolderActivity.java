@@ -103,7 +103,7 @@ public class FolderActivity extends AppCompatActivity implements onClickedListen
     }
 
     @Override
-    public void onPicClicked(String settingId) {
+    public void onPicClicked(int position) {
 
     }
 
