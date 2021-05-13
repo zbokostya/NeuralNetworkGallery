@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.transition.Fade;
 import android.util.Log;
@@ -38,7 +39,10 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -51,7 +55,7 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
     private int position;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    private final Setting[] allPhotos = {new Setting("Изменить", R.drawable.edit_button), new Setting("Печать А4", R.drawable.a4_icon), new Setting("Печать А5", R.drawable.a5_icon), new Setting("Печать А3", R.drawable.a3_icon), new Setting("Печать А2", R.drawable.a2_icon), new Setting("Удалить", R.drawable.delete_button)};
+    private final Setting[] allPhotos = {new Setting("Edit", R.drawable.edit_button), new Setting("Print on А4", R.drawable.a4_icon), new Setting("Print on А5", R.drawable.a5_icon), new Setting("Print on А3", R.drawable.a3_icon), new Setting("Print on А2", R.drawable.a2_icon), new Setting("Delete", R.drawable.delete_button)};
     private RecyclerView recyclerView;
 
     @Override
@@ -126,17 +130,18 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
 
     @Override
     public void onPicClicked(int position) {
+        String path = "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath();
         switch (position) {
             case 0: {
                 Intent move = new Intent(PhotoActivity.this, EditActivity.class);
-                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
-                move.putExtra("image_name",  allpictures.get(viewPager.getCurrentItem()).getPictureName());
+                move.putExtra("image_uri", path);
+                move.putExtra("image_name", allpictures.get(viewPager.getCurrentItem()).getPictureName());
                 startActivity(move);
                 break;
             }
             case 1: {
                 Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
-                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("image_uri", path);
                 move.putExtra("list_height", PaperPrintFormat.A4_HEIGHT);
                 move.putExtra("list_width", PaperPrintFormat.A4_WIDTH);
                 startActivity(move);
@@ -144,7 +149,7 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
             }
             case 2: {
                 Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
-                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("image_uri", path);
                 move.putExtra("list_height", PaperPrintFormat.A5_HEIGHT);
                 move.putExtra("list_width", PaperPrintFormat.A5_WIDTH);
                 startActivity(move);
@@ -152,7 +157,7 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
             }
             case 3: {
                 Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
-                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("image_uri", path);
                 move.putExtra("list_height", PaperPrintFormat.A3_HEIGHT);
                 move.putExtra("list_width", PaperPrintFormat.A3_WIDTH);
                 startActivity(move);
@@ -160,16 +165,28 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
             }
             case 4: {
                 Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
-                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("image_uri", path);
                 move.putExtra("list_height", PaperPrintFormat.A2_HEIGHT);
                 move.putExtra("list_width", PaperPrintFormat.A2_WIDTH);
                 startActivity(move);
                 break;
             }
             case 5: {
+                final Uri uri = MediaStore.Files.getContentUri("external");
+                File file = new File(allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                Log.d("4444", file.exists()+"");
+                file.delete();
+                PhotoActivity.this.getContentResolver().delete(uri,
+                        MediaStore.Files.FileColumns.DATA + "=?", new String[]{allpictures.get(viewPager.getCurrentItem()).getPicturePath()});
+                Intent move = new Intent(PhotoActivity.this, FolderActivity.class);
+                move.putExtra("folderPath", folderPath);
+                move.putExtra("folderName", getIntent().getStringExtra("folderName"));
+                startActivity(move);
+                finish();
                 break;
             }
         }
 
     }
+
 }

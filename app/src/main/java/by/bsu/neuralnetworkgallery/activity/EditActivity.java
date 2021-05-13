@@ -101,8 +101,11 @@ public class EditActivity extends AppCompatActivity implements StyleAdapter.Item
                     previouslySelected.setBackgroundResource(R.layout.border);
                     previouslySelected = null;
                     ImageWriter writer = new ImageWriter();
-                    writer.writeFile(bitmap);
-                    Toast.makeText(getApplicationContext(), "Successfully saved to " + Environment.getExternalStorageDirectory() + "/Pictures/Gallery/", Toast.LENGTH_LONG).show();
+                    String path = writer.writeFile(bitmap, EditActivity.this);
+                    Intent move = new Intent(EditActivity.this, FolderActivity.class);
+                    move.putExtra("folderPath", path);
+                    move.putExtra("folderName", "Gallery");
+                    startActivity(move);
                 }
             };
             if (Integer.parseInt(id_post) == 0) {

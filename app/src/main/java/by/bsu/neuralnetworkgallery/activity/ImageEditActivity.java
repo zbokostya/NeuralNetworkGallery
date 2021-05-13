@@ -2,6 +2,8 @@ package by.bsu.neuralnetworkgallery.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -29,6 +32,8 @@ import java.util.Calendar;
 import java.util.Stack;
 
 import by.bsu.neuralnetworkgallery.R;
+import by.bsu.neuralnetworkgallery.dao.ImageWriter;
+import by.bsu.neuralnetworkgallery.entity.Folder;
 import by.bsu.neuralnetworkgallery.values.ImageChangeMode;
 import by.bsu.neuralnetworkgallery.utils.ImageScaleListener;
 import by.bsu.neuralnetworkgallery.values.PaperPrintFormat;
@@ -135,8 +140,13 @@ public class ImageEditActivity extends Activity implements View.OnDragListener, 
         for (ImageView view : operatedViews)
             writeBitmap(view, bitmap, w, h, x, y);
 
-        writeFile(bitmap);
 
+        ImageWriter writer = new ImageWriter();
+        String path = writer.writeFile(bitmap, ImageEditActivity.this);
+        Intent move = new Intent(ImageEditActivity.this, FolderActivity.class);
+        move.putExtra("folderPath", path);
+        move.putExtra("folderName", "Gallery");
+        startActivity(move);
     }
 
     public Bitmap writeBitmap(ImageView from, Bitmap to, int w, int h, int x, int y) {
@@ -179,30 +189,6 @@ public class ImageEditActivity extends Activity implements View.OnDragListener, 
             for (int jj = 0; jj < d - c; jj++)
                 to.setPixel(i + ii, k + jj, copy.getPixel(a + ii, c + jj));
         return to;
-    }
-
-    public void writeFile(final Bitmap bitmap) {
-        File file = Environment.getExternalStorageDirectory();
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        int hour = calendar.get(Calendar.HOUR);
-        int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
-        final String fileName = "IMG_" + year + "" + month + "" + day + "_" + hour + "" + minute + "" + second + ".png";
-        try {
-            File dir = new File(file + "/Pictures/Gallery/");
-            dir.mkdirs();
-            File write = new File(dir, fileName);
-            FileOutputStream out = new FileOutputStream(write);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out.flush();
-            out.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -325,4 +311,5 @@ public class ImageEditActivity extends Activity implements View.OnDragListener, 
                 break;
         }
     }
+
 }

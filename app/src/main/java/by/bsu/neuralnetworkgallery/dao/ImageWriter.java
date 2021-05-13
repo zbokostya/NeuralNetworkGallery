@@ -1,8 +1,10 @@
 package by.bsu.neuralnetworkgallery.dao;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.provider.MediaStore;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,7 +13,7 @@ import java.util.Calendar;
 
 public class ImageWriter {
 
-    public void writeFile(final Bitmap bitmap) {
+    public String writeFile(final Bitmap bitmap, Context context) {
         File file = Environment.getExternalStorageDirectory();
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -30,9 +32,17 @@ public class ImageWriter {
             out.flush();
             out.close();
 
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis() / 1000);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+            contentValues.put(MediaStore.MediaColumns.DATA, write.getAbsolutePath());
+            context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            return dir.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
 
         }
+        return null;
     }
+
 }
