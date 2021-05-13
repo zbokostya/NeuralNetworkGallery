@@ -17,15 +17,16 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import by.bsu.neuralnetworkgallery.R;
+import by.bsu.neuralnetworkgallery.entity.Setting;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
 
 public class BottomCarouselAdapter extends RecyclerView.Adapter<BottomCarouselAdapter.SettingsHolder> {
 
-    private int[] allPhotos;
+    private Setting[] allPhotos;
     private AppCompatActivity carouselContext;
     private onClickedListener onClickedListener;
 
-    public BottomCarouselAdapter(int[] allPhotos, AppCompatActivity carouselContext, onClickedListener onClickedListener) {
+    public BottomCarouselAdapter(Setting[] allPhotos, AppCompatActivity carouselContext, onClickedListener onClickedListener) {
         this.allPhotos = allPhotos;
         this.carouselContext = carouselContext;
         this.onClickedListener = onClickedListener;
@@ -41,8 +42,8 @@ public class BottomCarouselAdapter extends RecyclerView.Adapter<BottomCarouselAd
 
     @Override
     public void onBindViewHolder(@NonNull SettingsHolder holder, int position) {
-        holder.settingPic.setImageResource(allPhotos[position]);
-        holder.settingName.setText(position+"");
+        holder.settingPic.setImageResource(allPhotos[position].getId());
+        holder.settingName.setText(allPhotos[position].getName());
         DisplayMetrics metrics = new DisplayMetrics();
         carouselContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         final int widthCount = metrics.widthPixels / 160;
@@ -58,7 +59,7 @@ public class BottomCarouselAdapter extends RecyclerView.Adapter<BottomCarouselAd
 
     @Override
     public int getItemCount() {
-        return 6;
+        return allPhotos.length;
     }
 
     public class SettingsHolder extends RecyclerView.ViewHolder {

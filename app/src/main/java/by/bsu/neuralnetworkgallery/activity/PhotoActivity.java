@@ -12,8 +12,10 @@ import by.bsu.neuralnetworkgallery.adapter.BottomCarouselAdapter;
 import by.bsu.neuralnetworkgallery.adapter.PhotoAdapter;
 import by.bsu.neuralnetworkgallery.adapter.ViewPagerAdapter;
 import by.bsu.neuralnetworkgallery.entity.Photo;
+import by.bsu.neuralnetworkgallery.entity.Setting;
 import by.bsu.neuralnetworkgallery.utils.ImageGestureDetector;
 import by.bsu.neuralnetworkgallery.utils.onClickedListener;
+import by.bsu.neuralnetworkgallery.values.PaperPrintFormat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -43,19 +45,15 @@ import java.util.Collections;
 
 public class PhotoActivity extends AppCompatActivity implements onClickedListener {
 
-    public static final String EXTRA_SPACE_PHOTO = "SpacePhotoActivity.SPACE_PHOTO";
-
-    // private ImageView mImageView;
     private String imagePath;
     private String folderPath;
     private ArrayList<Photo> allpictures;
     private int position;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    private final int[] allPhotos = {R.drawable.picture111, R.drawable.picture2, R.drawable.picture3, R.drawable.picture4, R.drawable.picture5, R.drawable.picture6};
+    private final Setting[] allPhotos = {new Setting("Изменить", R.drawable.edit_button), new Setting("Печать А4", R.drawable.a4_icon), new Setting("Печать А5", R.drawable.a5_icon), new Setting("Печать А3", R.drawable.a3_icon), new Setting("Печать А2", R.drawable.a2_icon), new Setting("Удалить", R.drawable.delete_button)};
     private RecyclerView recyclerView;
 
-    // String
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,17 +126,50 @@ public class PhotoActivity extends AppCompatActivity implements onClickedListene
 
     @Override
     public void onPicClicked(int position) {
-        if (position == 0) {
-            Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
-            move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
-            startActivity(move);
+        switch (position) {
+            case 0: {
+                Intent move = new Intent(PhotoActivity.this, EditActivity.class);
+                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("image_name",  allpictures.get(viewPager.getCurrentItem()).getPictureName());
+                startActivity(move);
+                break;
+            }
+            case 1: {
+                Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
+                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("list_height", PaperPrintFormat.A4_HEIGHT);
+                move.putExtra("list_width", PaperPrintFormat.A4_WIDTH);
+                startActivity(move);
+                break;
+            }
+            case 2: {
+                Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
+                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("list_height", PaperPrintFormat.A5_HEIGHT);
+                move.putExtra("list_width", PaperPrintFormat.A5_WIDTH);
+                startActivity(move);
+                break;
+            }
+            case 3: {
+                Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
+                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("list_height", PaperPrintFormat.A3_HEIGHT);
+                move.putExtra("list_width", PaperPrintFormat.A3_WIDTH);
+                startActivity(move);
+                break;
+            }
+            case 4: {
+                Intent move = new Intent(PhotoActivity.this, ImageEditActivity.class);
+                move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
+                move.putExtra("list_height", PaperPrintFormat.A2_HEIGHT);
+                move.putExtra("list_width", PaperPrintFormat.A2_WIDTH);
+                startActivity(move);
+                break;
+            }
+            case 5: {
+                break;
+            }
         }
 
-        if (position == 4) {
-            Intent move = new Intent(PhotoActivity.this, EditActivity.class);
-            move.putExtra("image_uri", "file://" + allpictures.get(viewPager.getCurrentItem()).getPicturePath());
-            move.putExtra("image_name",  allpictures.get(viewPager.getCurrentItem()).getPictureName());
-            startActivity(move);
-        }
     }
 }

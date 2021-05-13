@@ -31,12 +31,11 @@ import java.util.Stack;
 import by.bsu.neuralnetworkgallery.R;
 import by.bsu.neuralnetworkgallery.values.ImageChangeMode;
 import by.bsu.neuralnetworkgallery.utils.ImageScaleListener;
+import by.bsu.neuralnetworkgallery.values.PaperPrintFormat;
 
 public class ImageEditActivity extends Activity implements View.OnDragListener, View.OnTouchListener, View.OnClickListener  {
 
     private TextView textView;
-    private final int _X = 210;
-    private final int _Y = 297;
     private Button button2;
     private ImageChangeMode mode = ImageChangeMode.IMAGE_SELECT;
     private Integer selectedElement = null;
@@ -76,7 +75,7 @@ public class ImageEditActivity extends Activity implements View.OnDragListener, 
         button.setOnClickListener(this);
         button2.setOnClickListener(this);
 
-        createField(_X, _Y);
+        createField(getIntent().getIntExtra("list_width", PaperPrintFormat.A4_WIDTH), getIntent().getIntExtra("list_height", PaperPrintFormat.A4_HEIGHT));
         operatedViews.push(imageView);
         initImageViews();
     }
@@ -89,8 +88,8 @@ public class ImageEditActivity extends Activity implements View.OnDragListener, 
         int y_times = (int) Math.round(0.9 * height / Y);
         int x_times = (int) Math.round(0.9 * width / X);
         int times = Math.min(x_times, y_times);
-        int finalX = times * _X;
-        int finalY = times * _Y;
+        int finalX = times * X;
+        int finalY = times * Y;
         ViewGroup.LayoutParams layoutParams = textView.getLayoutParams();
         layoutParams.width = finalX;
         layoutParams.height = finalY;
