@@ -72,9 +72,10 @@ public class StyleAdapter extends RecyclerView.Adapter<StyleAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
 //        String animal = mData.get(position).;
 //        holder.myTextView.setText(animal);
-//        String footer = mData.get(position).getDescription();
+        String footer = mData.get(position).getFooter();
 //        holder.myTextView2.setText(footer);
 //        mData =
+        holder.myTextView.setText(footer);
         if (position != 0)
             getResult(position + "", holder.myImageView);
     }

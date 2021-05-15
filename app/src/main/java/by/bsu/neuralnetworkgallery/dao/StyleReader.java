@@ -37,11 +37,11 @@ public class StyleReader {
     public void read(Context context) {
         ready = false;
         styles.clear();
-        styles.add(new Style("0", "0"));
+        styles.add(new Style("0", "0", "Choose your own style"));
         Log.i("StyleReader", "get styles");
         ready = true;
         for (int i = 1; i < 7; i++) {
-            styles.add(new Style("0", i + ""));
+            styles.add(new Style("0", i + "", "Style: " + i));
         }
         ready = true;
 //            int finalI = i;

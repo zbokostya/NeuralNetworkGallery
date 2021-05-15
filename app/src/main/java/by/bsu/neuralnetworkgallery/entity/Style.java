@@ -114,10 +114,12 @@ import android.graphics.Bitmap;
 public class Style {
     private String url;
     private String id;
+    private String footer;
 
-    public Style(String url, String id) {
+    public Style(String url, String id, String footer) {
         this.url = url;
         this.id = id;
+        this.footer = footer;
     }
 
     public String getUrl() {
@@ -134,5 +136,13 @@ public class Style {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getFooter() {
+        return footer;
+    }
+
+    public void setFooter(String footer) {
+        this.footer = footer;
     }
 }

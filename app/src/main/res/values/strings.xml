@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Gallery</string>
+    <string name="app_name">PhotoPrint</string>
     <string name="folderName">Folder Name</string>
     <string name="appName">Simple Image Gallery</string>
     <string name="empty">No Images on this device</string>
